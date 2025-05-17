@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>むすぶチャンネル 投票</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: #ffffff;
+    }
+    button {
+      font-size: 1.2em;
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #ffffff;
+      background-color: #1f1f1f;
+      transition: background-color 0.3s, transform 0.1s, opacity 0.3s;
+    }
+    button:hover:enabled {
+      background-color: #333333;
+    }
+    button:active:enabled {
+      transform: scale(0.98);
+    }
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    #result {
+      margin-top: 30px;
+      font-size: 1.3em;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      padding: 20px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h1>むすぶチャンネルが好きですか？</h1>
+  <button id="likeBtn" onclick="vote('like')">👍 好き</button>
+  <button id="dislikeBtn" onclick="vote('dislike')">👎 嫌い</button>
+  <div id="result" style="display:none;"></div>
+  <script>
+    function getFakeResults() {
+      const today = new Date().getDate();
+      const baseLike = 60 + (today % 10);
+      const baseDislike = 100 - baseLike;
+      return { like: baseLike, dislike: baseDislike };
+    }
+
+    function vote(choice) {
+      const results = getFakeResults();
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('result').innerHTML = `
+        <p>投票ありがとうございます！</p>
+        <p><strong>現在の投票結果：</strong></p>
+        <p>👍 好き: ${results.like}%</p>
+        <p>👎 嫌い: ${results.dislike}%</p>
+      `;
+      document.getElementById('likeBtn').disabled = true;
+      document.getElementById('dislikeBtn').disabled = true;
+      localStorage.setItem("voted", "true");
+    }
+
+    function checkVoteStatus() {
+      if (localStorage.getItem("voted") === "true") {
+        const results = getFakeResults();
+        document.getElementById('likeBtn').disabled = true;
+        document.getElementById('dislikeBtn').disabled = true;
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('result').innerHTML = `
+          <p>投票ありがとうございます！</p>
+          <p><strong>現在の投票結果：</strong></p>
+          <p>👍 好き: ${results.like}%</p>
+          <p>👎 嫌い: ${results.dislike}%</p>
+        `;
+      }
+    }
+
+    window.onload = checkVoteStatus;
+  </script>
+</body>
+</html>
